@@ -25,3 +25,22 @@ Clone the repository:
 ```bash
 git clone https://github.com/Harsh280705/phonebook_java.git
 cd phonebook_java
+
+Build and start:
+
+docker compose up --build
+
+Open:
+
+http://localhost
+Stop
+docker compose down
+Testing
+
+Run Playwright tests from the frontend directory:
+
+npm run test:e2e
+
+Run backend API tests using the configured Docker test service:
+
+docker compose --profile test run --rm api-tests
