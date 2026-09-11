@@ -1,7 +1,7 @@
 ````markdown
-# 📞 Phonebook Application (.NET 10)
+# 📞 Phonebook Application (Java + MongoDB)
 
-A full-stack Phonebook Application built using **Vue.js, .NET 10 ASP.NET Core, PostgreSQL, Docker, and Nginx**.
+A full-stack Phonebook Application built using **Vue.js, Java 17 Spring Boot 3, MongoDB, Docker, and Nginx**.
 
 ## Architecture
 
@@ -10,15 +10,15 @@ Browser
    ↓
 Nginx (Vue.js Frontend)
    ↓  /api
-.NET 10 ASP.NET Core Web API
+Java 17 Spring Boot 3 Web API
    ↓
-PostgreSQL
-````
+MongoDB
+```
 
 ## Features
 
 * User registration and login
-* PostgreSQL-based authentication
+* MongoDB-based session authentication (HttpOnly cookie)
 * Protected API endpoints
 * Add, view, update, and delete contacts
 * User-specific contact ownership
@@ -27,7 +27,8 @@ PostgreSQL
 * Import contacts using CSV
 * CSV column mapping and validation
 * Export contacts as CSV
-* PostgreSQL database storage
+* Contact tag system (multiple tags per contact, tag filtering/search)
+* MongoDB storage (contacts embed `tag_ids`; tags scoped per user)
 * Up to 1000 contacts for testing
 
 ## Run Locally
@@ -73,7 +74,7 @@ docker compose up --build
 With the stack running:
 
 ```bash
-docker compose exec backend dotnet Phonebook.Api.dll populate
+docker compose run --rm backend populate
 ```
 
 This adds contacts until the database has approximately 1000 contacts. Existing contacts are preserved.
@@ -124,6 +125,7 @@ The Playwright tests cover:
 * CSV export
 * Search
 * Pagination
+* Tags
 
 ```
 ```

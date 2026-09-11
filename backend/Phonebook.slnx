@@ -1,4 +1,0 @@
-<Solution>
-  <Project Path="Phonebook.Api.csproj" />
-  <Project Path="Phonebook.Api.Tests/Phonebook.Api.Tests.csproj" />
-</Solution>

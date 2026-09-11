@@ -1,5 +1,5 @@
-# Test project is run from a mounted SDK container, not this image
-Phonebook.Api.Tests/
-TestResults/
-**/bin/
-**/obj/
+# Java + Maven
+target/
+*.class
+.idea/
+.vscode/

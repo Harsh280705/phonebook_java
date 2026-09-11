@@ -1,21 +1,21 @@
 services:
   db:
-    image: postgres:16
+    image: mongo:7
     container_name: phonebook-db
 
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: RoKo@2024
-      POSTGRES_DB: phonebook_db
+      MONGO_INITDB_ROOT_USERNAME: phonebook
+      MONGO_INITDB_ROOT_PASSWORD: RoKo@2024
+      MONGO_INITDB_DATABASE: phonebook_db
 
     ports:
-      - "5434:5432"
+      - "27018:27017"
 
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - mongo_data:/data/db
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d phonebook_db"]
+      test: ["CMD-SHELL", "mongosh --quiet -u phonebook -p 'RoKo@2024' --eval 'db.adminCommand(\"ping\")'"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -29,8 +29,7 @@ services:
     container_name: phonebook-backend
 
     environment:
-      DATABASE_URL: postgresql://postgres:RoKo%402024@db:5432/phonebook_db
-      ASPNETCORE_URLS: http://0.0.0.0:8000
+      MONGODB_URI: mongodb://phonebook:RoKo%402024@db:27017/phonebook_db?authSource=admin
 
     depends_on:
       db:
@@ -54,20 +53,19 @@ services:
 
   api-tests:
     profiles: ["test"]
-    image: mcr.microsoft.com/dotnet/sdk:10.0
+    image: maven:3.9-eclipse-temurin-17
     working_dir: /src
     volumes:
       - ./backend:/src
+      - maven_cache:/root/.m2
     environment:
-      TEST_POSTGRES_HOST: db
-      TEST_POSTGRES_PORT: "5432"
-      TEST_POSTGRES_USER: postgres
-      TEST_POSTGRES_PASSWORD: RoKo@2024
+      MONGODB_URI: mongodb://phonebook:RoKo%402024@db:27017/phonebook_test?authSource=admin
     depends_on:
       db:
         condition: service_healthy
-    command: ["dotnet", "test", "Phonebook.slnx", "--nologo"]
+    command: ["mvn", "test"]
 
 
 volumes:
-  postgres_data:
+  mongo_data:
+  maven_cache:
